@@ -31,7 +31,6 @@ public class User implements UserDetails {
 
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
@@ -40,9 +39,6 @@ public class User implements UserDetails {
         } else {
             return List.of(new SimpleGrantedAuthority("ROLE_USER"));
         }
-
-
-
     }
 
     @Override
