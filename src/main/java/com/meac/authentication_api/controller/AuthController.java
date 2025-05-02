@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private AuthenticationManager authenticationManager;
@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthUserDTO authUserDTO ) {
 
-            var usernamePassword = new UsernamePasswordAuthenticationToken(authUserDTO.login(), authUserDTO.password());
+            var usernamePassword = new UsernamePasswordAuthenticationToken(authUserDTO.username(), authUserDTO.password());
 
             var auth = authenticationManager.authenticate(usernamePassword);
 
