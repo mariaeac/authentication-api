@@ -1,8 +1,10 @@
 package com.meac.authentication_api.controller;
 
 import com.meac.authentication_api.domain.user.AuthUserDTO;
+import com.meac.authentication_api.domain.user.LoginResponseDTO;
 import com.meac.authentication_api.domain.user.RegisterUserDTO;
 import com.meac.authentication_api.domain.user.User;
+import com.meac.authentication_api.infrastructure.security.TokenService;
 import com.meac.authentication_api.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +22,12 @@ public class AuthController {
 
     private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
+    private TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
@@ -33,8 +37,9 @@ public class AuthController {
 
             var auth = authenticationManager.authenticate(usernamePassword);
 
-            return ResponseEntity.ok().build();
+            var token = tokenService.generateToken((User) auth.getPrincipal());
 
+            return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
